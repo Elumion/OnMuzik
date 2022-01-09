@@ -13,6 +13,8 @@
             <nav class="nav">
                 <a href="/" class="logo link">Home</a>
                 <a href="/news" class="logo link">News</a>
+                <a href="/users/register" class="logo link">Register</a>
+                <a href="/users/login" class="logo link">Login</a>
 
             </nav>
         </div>
@@ -20,7 +22,13 @@
     <main class="main">
         <div class="container">
             <h1 class="title"><?=$PageTitle ?></h1>
-        <?=$PageContent ?>
+            <? if (!empty($MessageText)): ?>
+            <div class="<?=$MessageClass ?>">
+                <?=$MessageText ?>
+            </div>
+            <? endif; ?>
+            <? ?>
+            <?=$PageContent ?>
         </div>
     </main>
 </body>

@@ -14,9 +14,15 @@ class Core
 {
     private static $instance;
     private static $mainTemplate;
+    private static $db;
     private function __construct()
     {
-
+        global $Config;
+        spl_autoload_register( '\core\Core::__autoload');
+        self::$db = new \core\DB($Config['Database']['Server'],
+            $Config['Database']['Username'],
+            $Config['Database']['Password'],
+            $Config['Database']['Database']);
     }
 
     /**
@@ -69,9 +75,17 @@ class Core
 
     }
 
+    /**
+     * Return db for future work with
+     * @return DB
+     */
+    public function getDB(){
+        return self::$db;
+    }
+
+
     public function init(){
         session_start();
-        spl_autoload_register( '\core\Core::__autoload');
         self::$mainTemplate = new Template();
     }
 
