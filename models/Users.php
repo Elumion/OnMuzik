@@ -8,24 +8,73 @@ use core\Utils;
 
 class Users extends Model
 {
-    public function AddUser($userRow){
-        $fields = ['login','password','email'];
-        $userRow = Utils::ArrayFilter($userRow, $fields);
-        $user = $this->GetUserByLogin($userRow['login']);
-        $userEmail = $this->GetUserByEmail($userRow['email']);
-        if (!empty($user) or !empty($userEmail))
+    public function Validate($formRow){
+        $errors = [];
+        $userLogin = $this->GetUserByLogin($formRow['login']);
+        $userEmail = $this->GetUserByEmail($formRow['email']);
+        if(empty($formRow['login']))
+            $errors[] ='Поле логін не може бути порожнім';
+        if(empty($formRow["password"]))
+            $errors[] = 'Поле пароль не може бути порожнім';
+        if($formRow["password"] != $formRow['password2'])
+            $errors[] = 'Паролі не співпадають';
+        if(empty($formRow['email']))
+            $errors[] = 'Поле емайл не може бути порожнім';
+        if(!empty($userLogin))
+            $errors[] = 'Користувач з заданим логіном уже існує';
+        if (!empty($userEmail))
+            $errors[] = 'Користувач з заданою поштою уже існує';
+        if(count($errors)>0)
+            return $errors;
+        else
+            return true;
+    }
+
+    public function IsUserAuthenticated()
+    {
+        return isset($_SESSION['user']);
+    }
+
+    public function GetUserById($id){
+        $user = \core\Core::getInstance()->getDB()->select('user', '*',['id'=>$id]);
+        if (empty($user))
             return false;
-        $userRow['password'] = md5($userRow["password"]);
-        \core\Core::getInstance()->getDB()->insert('user', $userRow);
+        return $user[0];
+    }
+
+
+    public function GetCurrentUser(){
+        if ($this->IsUserAuthenticated())
+            return $_SESSION['user'];
+        else
+            return null;
+    }
+
+    public function AddUser($userRow){
+        $validateResult =  $this->Validate($userRow);
+        if(is_array($validateResult))
+            return $validateResult;
+
+        $fields = ['login','password','email'];
+        $userRowFiltered = Utils::ArrayFilter($userRow, $fields);
+        $userRowFiltered['password'] = md5($userRowFiltered["password"]);
+        \core\Core::getInstance()->getDB()->insert('user', $userRowFiltered);
         return true;
     }
 
-    public function AuthUser($login,$password){
+    public function AuthUser($email,$password){
         $password = md5($password);
-        \core\Core::getInstance()->getDB()->select('user', [
-            'login'=>$login,
+        $users = \core\Core::getInstance()->getDB()->select('user','*', [
+            'email'=>$email,
             'password'=>$password
         ]);
+        if(count($users)>0)
+        {
+            $user = $users[0];
+            return $user;
+        }
+        else
+            return false;
     }
 
     public function GetUserByLogin($login)

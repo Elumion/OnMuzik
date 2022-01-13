@@ -85,6 +85,7 @@ class DB
         $sql = "INSERT INTO {$table} ($fieldsSTR) VALUES ($valuesSTR)";
         $sth =$this->pdo->prepare($sql);
         $sth->execute(array_values($row));
+        return $this->pdo->lastInsertId();
     }
 
     /**
@@ -104,11 +105,18 @@ class DB
         if(is_string($where))
             $sql.= " WHERE ".$where;
 
+
+        $sthDel = $this->pdo->prepare('SET FOREIGN_KEY_CHECKS=0;');
+        $sthDel->execute();
+
         $sth = $this->pdo->prepare($sql);
         if(is_array($where) && count(($where))>0)
             $sth->execute(array_values($where));
         else
             $sth->execute();
+
+        $sthDel = $this->pdo->prepare('SET FOREIGN_KEY_CHECKS=1;');
+        $sthDel->execute();
     }
 
     /**
@@ -143,5 +151,6 @@ class DB
             $sql.= " WHERE ".$where;
         $sth = $this->pdo->prepare($sql);
         $sth->execute($paramsArr);
+
     }
 }

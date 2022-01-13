@@ -7,5 +7,6 @@ $Config =
             'Username' => 'root',
             'Password' => null,
             'Database' => 'onmuzik'
-        ]
+        ],
+        'SongsCount' => 20
     ];
