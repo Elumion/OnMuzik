@@ -1,2 +1,363 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #2b2b2b;
+    --links: #0241ad;
+    --button: #f4d47e;
+    --text: #feffff;
+}
+
 body {
+    background-color: var(--button);
+    font-family: "Commissioner", sans-serif;
+}
+
+.header {
+    padding: 13px;
+    background-color: var(--background);
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.header__list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-left: 120px;
+}
+.header__flex {
+    display: flex;
+}
+.account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.account__link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.account__name {
+    color: var(--button);
+    font-size: 18px;
+    overflow-wrap: break-word;
+}
+.account__name:hover {
+    text-shadow: 2px 2px 1px rgba(172, 152, 152, 0.548);
+}
+.account__img {
+    border-radius: 15px;
+    height: 30px;
+    object-fit: cover;
+    background-color: #fff;
+    border: 1px solid black;
+}
+.logo .on {
+    color: var(--button);
+}
+.logo .muzik {
+    text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff,
+        1px -1px 0 #fff, -1px 1px 0 #fff;
+    color: var(--links);
+}
+.logo {
+    font-size: 38px;
+    font-weight: 900;
+}
+.link {
+    color: var(--text);
+}
+.link:hover {
+    color: var(--button);
+}
+.nav__link {
+    position: relative;
+    letter-spacing: 1px;
+    font-size: 21px;
+    color: #fff;
+}
+.nav__link:after {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    background: #fff;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+}
+.nav__link:hover {
+    color: #5d76bb;
+}
+.nav__link:hover:after {
+    width: 100%;
+    left: 0;
+    transform: translateY(5px);
+}
+.header__link {
+    font-size: 20px;
+}
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.search {
+    display: flex;
+    align-items: center;
+}
+.search__input {
+    font-family: "Commissioner", sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    width: 320px;
+    height: 36px;
+    padding: 4px 3px;
+    border-radius: 4px;
+    border: none;
+}
+.search__input:focus {
+    font-family: "Commissioner", sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    background-color: rgb(175, 173, 173);
+    border: none;
+}
+.search__input::placeholder {
+    font-family: "Commissioner", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+}
+.search__btn {
+    padding: 4px;
+    color: var(--button);
+}
+.search__btn:hover {
+    color: var(--text);
+}
+.btn {
+    padding: 10px;
+    background-color: var(--button);
+    color: var(--background);
+    border-radius: 5px;
+    font-weight: 700;
+}
+.btn:hover {
+    background-color: var(--button);
+    text-shadow: 2px 2px 1px rgb(172 152 152);
+}
+.users__btn {
+}
+
+.change__btn {
+    padding: 10px;
+    width: fit-content;
+    display: block;
+    margin: 0 auto;
+    border-bottom: 1px solid #2b2b2b;
+    margin-bottom: 40px;
+    transition: outline 0.9s ease;
+}
+
+.change__btn:hover {
+    outline: 1px solid #2b2b2b;
+}
+
+.title {
+    text-align: center;
+}
+
+.footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-bottom: 180px;
+    background-color: #1f1e1e;
+    color: #fff;
+
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: #212121;
+    /* position sticky may cause some errors, if true, just delete it (Vladik =) ) */
+    position: sticky;
+    top: 100%;
+}
+
+.arrows {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 30px;
+}
+
+.footer__copy {
+    text-align: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* --------------Code for sticky footer-------------- */
+header,
+footer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+main {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+/* --------------------------------------------------- */
+
+.footer__title {
+    text-align: left;
+}
+
+.offset {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3f3f3f;
+}
+
+.forbidden {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 15px;
+    color: rgb(255, 255, 255);
+    background-color: #2b2b2b;
+}
+
+/* messages */
+.message__render {
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 auto;
+    text-align: center;
+    color: #fff;
+    background-color: #2b2b2b;
+}
+.ok,
+.success,
+.info,
+.error {
+    border-radius: 5px;
+    padding: 3px;
+    line-height: 1.5;
+}
+.success,
+.ok {
+    background-color: rgba(50, 233, 14, 0.5);
+}
+.error {
+    background-color: rgba(255, 51, 0, 0.5);
+}
+.info {
+    background-color: rgba(0, 238, 255, 0.5);
+}
+
+.delete__inner {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #2b2b2b;
+}
+.delete__text {
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(255, 51, 0, 0.5);
+    color: #fff;
+}
+.delete__btns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.delete__btn {
+    margin: 0;
+}
+
+@media screen and (max-width: 1015px) {
+    .header__flex {
+        align-items: center;
+    }
+    .header__list {
+        margin-left: 10px;
+    }
+    .footer__title,
+    .footer__link {
+        padding: 5px;
+    }
+}
+@media screen and (max-width: 908px) {
+    .account {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0;
+    }
+    .search__input {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 758px) {
+    .search__input {
+        width: 180px;
+    }
+    .header__flex {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+}
+@media screen and (max-width: 590px) {
+    .nav {
+        gap: 5px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .nav {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    .header__list {
+        flex-direction: column-reverse;
+    }
+    .account {
+        flex-wrap: nowrap;
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    .header__list {
+        gap: 10px;
+    }
+    .search__input,
+    .search {
+        width: 100%;
+    }
 }

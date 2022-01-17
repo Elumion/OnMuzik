@@ -25,46 +25,53 @@ class Songs extends Controller
      * Shows the list of last songs added
      * @return array|mixed|null
      */
-    public function actionIndex(){
+    public function actionIndex()
+    {
         global $Config;
+        $page = $_GET['page'];
         $title = 'Пісні';
-        $lastSongs = $this->songModel->GetLastSongs($Config['SongsCount']);
+        $lastSongs = $this->songModel->GetLastSongs($Config['SongsCount'], $page);
         $bands = $this->songModel->GetSongsBands($lastSongs);
-        return $this->render('index', ["lastSongs"=>$lastSongs, "bands"=>$bands],[
+        $isMore = false;
+        if (count($bands) === $Config['SongsCount'])
+            $isMore = true;
+        return $this->render('index', ["lastSongs" => $lastSongs, "bands" => $bands, 'currentPage' => $page, 'isMore' => $isMore], [
             'MainTitle' => $title,
             'PageTitle' => $title
+
         ]);
     }
 
-    public function actionView(){
-
+    public function actionView()
+    {
     }
 
     /**
      * add song
      */
-    public function actionAdd(){
+    public function actionAdd()
+    {
         $titleForbidden = 'Доступ заборонено';
 
-        if(empty( $this->user))
-            return $this->render('forbidden', null,[
+        if (empty($this->user))
+            return $this->render('forbidden', null, [
                 'MainTitle' => $titleForbidden,
                 'PageTitle' => $titleForbidden
             ]);
 
         $title = 'Додавання пісні';
 
-        if($this->isPost()){
-            $allowedTypesImg = ['image/png','image/jpeg'];
+        if ($this->isPost()) {
+            $allowedTypesImg = ['image/png', 'image/jpeg'];
             $allowedTypesMedia = ['audio/mpeg'];
 
 
             $result = $this->songModel->AddSongs($_POST);
 
-            if($result['error'] === false){
+            if ($result['error'] === false) {
 
-                if(is_file($_FILES['image']['tmp_name']) && in_array($_FILES['image']['type'], $allowedTypesImg)) {
-                    switch ( $_FILES['image']['type']){
+                if (is_file($_FILES['image']['tmp_name']) && in_array($_FILES['image']['type'], $allowedTypesImg)) {
+                    switch ($_FILES['image']['type']) {
                         case 'image/png':
                             $extention = 'png';
                             break;
@@ -72,12 +79,12 @@ class Songs extends Controller
                             $extention = 'jpg';
                             break;
                     }
-                    $imgName = $result["id"].'-'.uniqid().'.'.$extention;
+                    $imgName = $result["id"] . '-' . uniqid() . '.' . $extention;
                     move_uploaded_file($_FILES['image']['tmp_name'], 'assets/images/song_images/' . $imgName);
-                    $this->songModel->ChangePhoto($result['id'],$imgName);
+                    $this->songModel->ChangePhoto($result['id'], $imgName);
                 }
-                if(is_file($_FILES['media']['tmp_name']) && in_array($_FILES['media']['type'], $allowedTypesMedia)){
-                    switch ( $_FILES['media']['type']){
+                if (is_file($_FILES['media']['tmp_name']) && in_array($_FILES['media']['type'], $allowedTypesMedia)) {
+                    switch ($_FILES['media']['type']) {
                         case 'audio/mpeg':
                             $extention = 'mpeg';
                             break;
@@ -85,74 +92,82 @@ class Songs extends Controller
                             $extention = 'mp3';
                             break;
                     }
-                    $mediaName = $result["id"].'-'.uniqid().'.'.$extention;
-                    move_uploaded_file($_FILES['media']['tmp_name'], 'assets/music/'.$mediaName);
-                    $this->songModel->ChangeMedia($result['id'],$mediaName);
+                    $mediaName = $result["id"] . '-' . uniqid() . '.' . $extention;
+                    move_uploaded_file($_FILES['media']['tmp_name'], 'assets/music/' . $mediaName);
+                    $this->songModel->ChangeMedia($result['id'], $mediaName);
                 }
 
-                return $this->renderMessage('ok','Пісню успішно додано', null, [
-                    "MainTitle"=>$title,
+                return $this->renderMessage('ok', 'Пісню успішно додано', null, [
+                    "MainTitle" => $title,
                     "PageTitle" => $title
+
                 ]);
-            }else{
+            } else {
                 $message = implode('<br/>', $result['messages']);
-                return $this->render("add",null,[
-                    "MainTitle"=>$title,
+                return $this->render("add", null, [
+                    "MainTitle" => $title,
                     "PageTitle" => $title,
-                    "MessageClass" =>"error",
-                    "MessageText"=> $message
+                    'style' => 'style_form',
+                    "MessageClass" => "error",
+                    "MessageText" => $message
                 ]);
             }
-        }else
-            return $this->render('add', null,[
-            'MainTitle' => $title,
-            'PageTitle' => $title
-        ]);
+        } else
+            return $this->render('add', null, [
+                'MainTitle' => $title,
+                'PageTitle' => $title,
+                'style' => 'style_form'
+            ]);
     }
 
-    public function actionSearch(){
+    public function actionSearch()
+    {
         $name = $_GET['search'];
         $title = $name;
-        if(empty( $name) )
-            return $this->render('index', null,[
-                'MainTitle' => $title,
-                'PageTitle' => $title
+        $titleForbidden = 'Пісні не знайдено';
+        if (empty($name))
+            return $this->render('empty', null, [
+                'MainTitle' => $titleForbidden,
+                'PageTitle' => $titleForbidden
             ]);
-        $bands = $this->bandModel->GetBandsByName($name);
-        $songs = $this->songModel->GetSongsByName($name);
+        $bands = $this->bandModel->GetBandsByNameLike($name);
+        $songs = $this->songModel->GetSongsByNameLike($name);
+        $songBands = $this->songModel->GetSongsBands($songs);
 
-        return $this->render('search', ['modelSongs'=>$songs, 'modelBands'=>$bands],[
+        return $this->render('search', ['modelSongs' => $songs, 'modelBands' => $bands, 'bands' => $songBands], [
             'MainTitle' => $title,
-            'PageTitle' => $title
+            'PageTitle' => $title,
+            'style' => 'bands_list'
         ]);
     }
 
     /**
      * edit song
      */
-    public function actionEdit(){
+    public function actionEdit()
+    {
         $id = $_GET['id'];
         $song = $this->songModel->GetSongById($id);
         $band = $this->bandModel->GetBandById($song['band_id']);
         $titleForbidden = 'Доступ заборонено';
 
-        if(empty( $this->user) || $song['user_id'] != $this->user['id'] && $this->user['role_id']!= 1 )
-            return $this->render('forbidden', null,[
+        if (empty($this->user) || $song['user_id'] != $this->user['id'] && $this->user['role_id'] != 1)
+            return $this->render('forbidden', null, [
                 'MainTitle' => $titleForbidden,
                 'PageTitle' => $titleForbidden
             ]);
 
         $title = 'Редагування пісні';
 
-        if($this->isPost()){
+        if ($this->isPost()) {
             $result = $this->songModel->UpdateSongs($_POST, $id);
             $song = $this->songModel->GetSongById($id);
 
-            if($result === true){
-                $allowedTypesImg = ['image/png','image/jpeg'];
+            if ($result === true) {
+                $allowedTypesImg = ['image/png', 'image/jpeg'];
                 $allowedTypesMedia = ['audio/mpeg'];
-                if(is_file($_FILES['image']['tmp_name']) && in_array($_FILES['image']['type'], $allowedTypesImg)) {
-                    switch ( $_FILES['image']['type']){
+                if (is_file($_FILES['image']['tmp_name']) && in_array($_FILES['image']['type'], $allowedTypesImg)) {
+                    switch ($_FILES['image']['type']) {
                         case 'image/png':
                             $extention = 'png';
                             break;
@@ -160,12 +175,12 @@ class Songs extends Controller
                             $extention = 'jpg';
                             break;
                     }
-                    $imgName = $id.'-'.uniqid().'.'.$extention;
+                    $imgName = $id . '-' . uniqid() . '.' . $extention;
                     move_uploaded_file($_FILES['image']['tmp_name'], 'assets/images/song_images/' . $imgName);
-                    $this->songModel->ChangePhoto($id,$imgName);
+                    $this->songModel->ChangePhoto($id, $imgName);
                 }
-                if(is_file($_FILES['media']['tmp_name']) && in_array($_FILES['media']['type'], $allowedTypesMedia)){
-                    switch ( $_FILES['media']['type']){
+                if (is_file($_FILES['media']['tmp_name']) && in_array($_FILES['media']['type'], $allowedTypesMedia)) {
+                    switch ($_FILES['media']['type']) {
                         case 'audio/mpeg':
                             $extention = 'mpeg';
                             break;
@@ -173,52 +188,52 @@ class Songs extends Controller
                             $extention = 'mp3';
                             break;
                     }
-                    $mediaName = $id.'-'.uniqid().'.'.$extention;
-                    move_uploaded_file($_FILES['media']['tmp_name'], 'assets/music/'.$mediaName);
-                    $this->songModel->ChangeMedia($id,$mediaName);
+                    $mediaName = $id . '-' . uniqid() . '.' . $extention;
+                    move_uploaded_file($_FILES['media']['tmp_name'], 'assets/music/' . $mediaName);
+                    $this->songModel->ChangeMedia($id, $mediaName);
                 }
-                return $this->renderMessage('ok','Пісню успішно редаговано', null, [
-                    "MainTitle"=>$title,
+                return $this->renderMessage('ok', 'Пісню успішно редаговано', null, [
+                    "MainTitle" => $title,
                     "PageTitle" => $title
                 ]);
-            }else{
+            } else {
                 $message = implode('<br/>', $result);
-                return $this->render("edit",null,[
-                    "MainTitle"=>$title,
+                return $this->render("edit", null, [
+                    "MainTitle" => $title,
                     "PageTitle" => $title,
-                    "MessageClass" =>"error",
-                    "MessageText"=> $message
+                    "MessageClass" => "error",
+                    "MessageText" => $message,
+                    'style' => 'style_form'
                 ]);
             }
-        }else
-            return $this->render('edit', ['modelSong'=>$song, 'modelBand'=>$band],[
+        } else
+            return $this->render('edit', ['modelSong' => $song, 'modelBand' => $band], [
                 'MainTitle' => $title,
-                'PageTitle' => $title
+                'PageTitle' => $title,
+                'style' => 'style_form'
             ]);
-
     }
     /**
      * edit song
      */
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $title = "Видалення пісні";
         $id = $_GET['id'];
         $song = $this->songModel->GetSongById($id);
-        if(isset($_GET['confirm']) && $_GET['confirm'] == 'yes'){
-            if($this->songModel->DeleteSongs($id)){
-                header('Location: /songs/');
-            }else{
-                return $this->renderMessage('error','Помилка видалення пісні', null, [
-                    "MainTitle"=>$title,
+        if (isset($_GET['confirm']) && $_GET['confirm'] == 'yes') {
+            if ($this->songModel->DeleteSongs($id)) {
+                header('Location: /songs?page=1');
+            } else {
+                return $this->renderMessage('error', 'Помилка видалення пісні', null, [
+                    "MainTitle" => $title,
                     "PageTitle" => $title
                 ]);
             }
-
         }
-        return $this->render('delete', ['model'=>$song],[
+        return $this->render('delete', ['model' => $song], [
             'MainTitle' => $title,
             'PageTitle' => $title
         ]);
     }
-
 }

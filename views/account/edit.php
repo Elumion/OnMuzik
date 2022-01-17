@@ -1,23 +1,34 @@
 <form method="post" enctype="multipart/form-data" class="form">
-    <label >
-        <input type="text" name="login" value="<?=$user['login']?>" required>
-        login
-    </label>
-    <label >
-        <input type="email" name="email" value="<?=$user['email']?>" required>
-        email
-    </label>
-    <label>
-        <input type="password" name="oldPassword">
-        old password
-    </label>
-    <label>
-        <input type="password" name="newPassword">
-        new password
-    </label>
-    <label>
-        <input type="file" accept="image/jpeg, image/png" name="image">
-        image
-    </label>
-    <button type="submit">Зберегти аккаунт</button>
+    <div class="form__text">
+        <label class="form__label">
+            <span class="offset"> Логін:</span>
+            <input type="text" maxlength="40" name="login" value="<?= $user['login'] ?>" required>
+        </label>
+    </div>
+    <div class="form__text">
+        <label class="form__label">
+            <span class="offset"> Пошта: </span>
+            <input type="email" maxlength="40" name="email" value="<?= $user['email'] ?>" required>
+        </label>
+    </div>
+    <p class="text__info">Необов'язково</p>
+    <div class="form__text">
+        <label class="form__label">
+            <span class="offset"> Старий пароль:</span>
+            <input type="password" name="oldPassword">
+        </label>
+    </div>
+    <div class="form__text">
+        <label class="form__label">
+            <span class="offset"> Новий пароль:</span>
+            <input type="password" name="newPassword">
+        </label>
+    </div>
+    <div class="form__file">
+        <label class="form__label">
+            <span class="offset"> Картинка профілю:</span>
+            <input type="file" accept="image/jpeg, image/png" name="image">
+        </label>
+    </div>
+    <button class="btn change__btn" id="editSong" type="submit">Зберегти аккаунт</button>
 </form>

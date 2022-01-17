@@ -45,7 +45,7 @@ class Users extends Model
 
     public function GetCurrentUser(){
         if ($this->IsUserAuthenticated())
-            return $_SESSION['user'];
+            return $this->GetUserById($_SESSION['user']['id']);
         else
             return null;
     }

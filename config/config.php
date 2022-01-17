@@ -8,5 +8,5 @@ $Config =
             'Password' => null,
             'Database' => 'onmuzik'
         ],
-        'SongsCount' => 20
+        'SongsCount' => 12
     ];

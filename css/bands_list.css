@@ -1,0 +1,44 @@
+.bands__list {
+}
+.bands__list-item {
+    display: flex;
+    margin-bottom: 30px;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #2b2b2b;
+}
+.band-img {
+    width: 400px;
+    height: 230px;
+    margin: 0 auto;
+}
+.band-img-file {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.band__content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+.band-title {
+    font-weight: 900;
+    color: #fff;
+    margin-top: 0;
+}
+.band__description {
+    overflow-wrap: anywhere;
+    color: #fff;
+}
+
+.view__btn {
+    width: fit-content;
+    margin: 0 auto;
+}
+@media screen and (max-width: 500px) {
+    .band-img {
+        width: 100%;
+    }
+}

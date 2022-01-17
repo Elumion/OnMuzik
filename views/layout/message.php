@@ -1,3 +1,5 @@
-<div class="<?=$MessageClass ?>">
-    <?=$MessageText ?>
+<div class="message__render">
+    <p class="<?= $MessageClass ?>">
+        <?= $MessageText ?>
+    </p>
 </div>
