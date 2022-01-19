@@ -9,7 +9,11 @@ $user = $userModel->GetCurrentUser();
     <?php foreach ($modelSongs as $key => $value) : ?>
         <li class="songs__list-item">
             <div class="item__img-inner">
-                <img class="item__img" src="../../assets/images/song_images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? if ($value['image'] == 'default_song.png') : ?>
+                    <img class="item__img" src="../../assets/images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? else : ?>
+                    <img class="item__img" src="../../assets/images/song_images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? endif; ?>
             </div>
             <div class="song__content">
                 <a class="link band__link" title="<?= $bands[$key]['name'] ?>" href="/bands/view?id=<?= $bands[$key]['id'] ?>">
@@ -44,7 +48,11 @@ $user = $userModel->GetCurrentUser();
                         </a>
                     </h2>
                     <div class="band-img">
-                        <img class="band-img-file" src="../../assets/images/song_images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? if ($value['image'] == 'band_img.png') : ?>
+                            <img class="band-img-file" src="../../assets/images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? else : ?>
+                            <img class="band-img-file" src="../../assets/images/song_images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? endif; ?>
                     </div>
                     <p class="band__description">
                         <?= $value['description'] ?>

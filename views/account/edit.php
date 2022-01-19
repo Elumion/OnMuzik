@@ -1,3 +1,8 @@
+<?php
+$userModel = new \models\Users();
+$currentUser = $userModel->GetCurrentUser();
+?>
+
 <form method="post" enctype="multipart/form-data" class="form">
     <div class="form__text">
         <label class="form__label">
@@ -30,5 +35,13 @@
             <input type="file" accept="image/jpeg, image/png" name="image">
         </label>
     </div>
+    <?if($currentUser['role_id'] == 1):?>
+        <div class="form__text">
+            <label class="form__label">
+                <span class="offset"> Задати роль:</span>
+                <input type="number" min="1" max="3"value="<?= $user['role_id'] ?>" name="role_id">
+            </label>
+        </div>
+    <?endif;?>
     <button class="btn change__btn" id="editSong" type="submit">Зберегти аккаунт</button>
 </form>

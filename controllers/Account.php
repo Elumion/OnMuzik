@@ -104,4 +104,23 @@ class Account extends Controller
                 'style' => "style_form"
             ]);
     }
+
+    public function actionAdmin()
+    {
+        $title = 'Користувачі сайту';
+        $titleForbidden = 'Доступ обмежено';
+        $users = $this->userModel->GetAllUsers();
+        if (empty($this->user) || $this->user['role_id'] != 1)
+            return $this->render('forbidden', null, [
+                'MainTitle' => $titleForbidden,
+                'PageTitle' => $titleForbidden
+            ]);
+        else {
+            return $this->render('admin', ["users" => $users], [
+                'MainTitle' => $title,
+                'PageTitle' => $title,
+                'style' => 'style_admin'
+            ]);
+        }
+    }
 }

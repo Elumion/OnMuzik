@@ -12,6 +12,7 @@ $user = $userModel->GetCurrentUser();
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= $MainTitle ?></title>
+    <link rel="shortcut icon" href="../../assets/images/default_song.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,9 +29,12 @@ $user = $userModel->GetCurrentUser();
 <body>
     <header class="header">
         <div class="container header__flex">
-            <a class="logo_link logo" href="/"><span class="on">On</span><span class="muzik">Muzik</span></a>
+            <a class="logo_link logo" href="/songs?page=1"><span class="on">On</span><span class="muzik">Muzik</span></a>
             <ul class="header__list">
                 <nav class="nav">
+                    <? if ($user['role_id'] == 1) : ?>
+                        <a class="nav__link header__link" href="/account/admin">Користувачі</a>
+                    <? endif; ?>
                     <a class="nav__link header__link" href="/songs?page=1">Пісні</a>
                     <a class="nav__link header__link" href="/bands?page=1">Групи</a>
                     <div class="search">
@@ -44,9 +48,12 @@ $user = $userModel->GetCurrentUser();
                     <? if ($userModel->IsUserAuthenticated()) : ?>
                         <a class="account__link" href="/account?id=<?= $user['id'] ?>" title="<?= $user['login'] ?>">
                             <span class="account__name"> <?= $user['login'] ?> </span>
-                            <img class="account__img" src="../../assets/images/user_images/<?= $user['image'] ?>" width="30" alt="<?= $user['login'] ?>">
+                            <? if ($user['image'] == 'user_img.png') : ?>
+                                <img class="account__img" src="../../assets/images/<?= $user['image'] ?>" width="30" alt="<?= $user['login'] ?>">
+                            <? else : ?>
+                                <img class="account__img" src="../../assets/images/user_images/<?= $user['image'] ?>" width="30" alt="<?= $user['login'] ?>">
+                            <? endif; ?>
                         </a>
-
                         <a href="/users/logout" class="users__btn btn">Logout</a>
                     <? else : ?>
                         <a href="/users/register" class="users__btn btn">Register</a>

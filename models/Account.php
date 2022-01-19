@@ -42,7 +42,7 @@ class Account extends Model
         if (is_array($validateResult))
             return $validateResult;
 
-        $fields = ['login', 'image', 'email'];
+        $fields = ['login', 'image', 'email', 'role_id'];
         $rowFiltered = Utils::ArrayFilter($row, $fields);
 
         if (!empty($row['oldPassword']) && !empty($row['newPassword'])) {

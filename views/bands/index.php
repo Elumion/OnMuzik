@@ -9,7 +9,11 @@
                         </a>
                     </h2>
                     <div class="band-img">
-                        <img class="band-img-file" src="../../assets/images/song_images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? if ($value['image'] == 'band_img.png') : ?>
+                            <img class="band-img-file" src="../../assets/images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? else : ?>
+                            <img class="band-img-file" src="../../assets/images/song_images/<?= $value['image'] ?>" width="70" alt="<?= $value['name'] ?>">
+                        <? endif; ?>
                     </div>
                     <p class="band__description">
                         <?= $value['description'] ?>

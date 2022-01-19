@@ -1,6 +1,10 @@
 <div class="account__index-inner">
     <div class="account__index-img">
-        <img class="account__index-img-file" src="../../assets/images/user_images/<?= $user["image"] ?>" width="300" alt="">
+        <? if ($user['image'] == 'user_img.png') : ?>
+            <img class="account__index-img-file" src="../../assets/images/<?= $user["image"] ?>" width="300" alt="">
+        <? else : ?>
+            <img class="account__index-img-file" src="../../assets/images/user_images/<?= $user["image"] ?>" width="300" alt="">
+        <? endif; ?>
     </div>
     <div class="account__content">
         <p class="account__content-name">
@@ -20,7 +24,11 @@
     <?php foreach ($songs as $key => $value) : ?>
         <li class="songs__list-item">
             <div class="item__img-inner">
-                <img class="item__img" src="../../assets/images/song_images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? if ($value['image'] == 'default_song.png') : ?>
+                    <img class="item__img" src="../../assets/images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? else : ?>
+                    <img class="item__img" src="../../assets/images/song_images/<?= $value['image'] ?>" alt="<?= $value['title'] ?>" width="120">
+                <? endif; ?>
             </div>
             <div class="song__content">
                 <a class="link band__link" title="<?= $bands[$key]['name'] ?>" href="/bands/view?id=<?= $bands[$key]['id'] ?>">
